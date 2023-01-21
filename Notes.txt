@@ -1,0 +1,15 @@
+PA : Python Anywhere
+
+'PA_final.py' is deployed and live on PythonAnywhere and it is working fine.
+
+'PA_backtest_smtplib_mysql_4_7.py' is also tested on PythonAnywhere and working fine.
+
+In above 2 files , I have used mysql as pythonanywhere dont provide postgres for free. 
+So the code will not run in local. change db to postgres then it will work.
+
+
+
+
+connection.py , utils.py , execute_4_7.py , backtest_with_db_4_7.py , final_backtest_4_7.py are also implementing the same logic
+but with postgres db setup in local. (no email sending logic.)
+final_backtest_4_7.py do not need db.
