@@ -30,10 +30,19 @@ def send_mail(sell_reference=0, buy_reference=0,flag='default'):
     No action required for Reliance shares.
     Market price of Reliance is {sell_price}"""
 
+    message4 = f"""Subject: Error encountered.
+
+
+    Technical Error encountered while fetching data.
+    Issue is most prabably due to failed API call."""
+
+
     if flg == 'buy':
         message = message1
     elif flg == 'sell':
         message = message2
+    elif flg == 'error':
+        message = message4
     else:
         message = message3
 
@@ -63,9 +72,22 @@ end_date = datetime.now()
 start_date = end_date - timedelta(days=700)
 mail_sent = False
 ticker = "RELIANCE.NS"
+try:
+    stock_data = yf.Ticker(ticker).info
+    current_price = stock_data["regularMarketPrice"]
+except:
+    try:
+        data = yf.download(ticker, start=start_date, end=end_date, interval="1h")
+        time = "13:15:00" 
+        data = data[data.index.time == pd.to_datetime(time).time()]
+        datalist = data['Adj Close'].tolist()
+        adj_close_data = [round(i,2) for i in datalist]
+        current_price = adj_close_data[0]
+    except:
+        send_mail(flag='error')
+    
 
-stock_data = yf.Ticker(ticker).info
-current_price = stock_data["regularMarketPrice"]
+
 print(current_price)
 cursor.execute("SELECT buy_ref FROM reference;")
 buy_reference = cursor.fetchall()[0][0]

@@ -15,3 +15,4 @@ def get_current_market_price(ticker):
     info = yf.Ticker(ticker).info
     current_price = info
     return(current_price)
+    
