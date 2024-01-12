@@ -98,12 +98,13 @@ for ticker in tickers:
         else: 
             count=count-1 
         max_count = max(max_count, count)
-    
+
+    xirr = xirr(xirr_df['date'], xirr_df['value'])
     print('\n---------------------------*****-----------------------------\n')
     print(f"Data for {ticker}")
-    xirr = xirr(xirr_df['date'], xirr_df['value'])
     print(f"current absolute profit considering 1 share:{current_absolute_profit}")
     print(f"xirr: {xirr}")
+    print(f"Max number of open Buys :{max_count}")
     print('\n---------------------------*****-----------------------------\n')
     print(f"all buy values:{all_buys}")
     print(f"all sell values:{all_sells}")
@@ -117,7 +118,7 @@ for ticker in tickers:
     print(f"Transactions in sequence :{transactions}")
     print(f"Count of Sell Orders :{transactions.count('S')}")
     print(f"Count of Buy Orders :{transactions.count('B')}")
-    print(f"Max number of open Buys :{max_count}")
+    
 
 
 
