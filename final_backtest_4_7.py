@@ -23,8 +23,6 @@ for ticker in tickers:
     time = "14:15:00" 
     data = data[data.index.time == pd.to_datetime(time).time()]
     data = data.reset_index()
-    print(data)
-
     # Considering close price, date and converting to list , rounding to 2 decimal places.
     close_data = list(zip(data['Close'].round(2), data['Datetime'].dt.date))
     initial_buy = close_data[0][0]
@@ -47,8 +45,11 @@ for ticker in tickers:
     for val_date in close_data[1:]:
         cur_val = val_date[0]
         cur_date = val_date[1]
+        last_open_buy =  buy_level[-1] if len(buy_level) > 0 else 99999
+
         #handles buy logic if current price is less than 4% of reference buy value.
-        if cur_val < buy_ref-(BUY_FACTOR*buy_ref):
+        if cur_val < buy_ref-(BUY_FACTOR*buy_ref) and  cur_val< last_open_buy-0.02*last_open_buy:
+            # handle too close buys
             xirr_df = xirr_df.append({"date":cur_date, "value":-cur_val}, ignore_index = True)
             buy_level.append(cur_val)
             all_buys.append(cur_val)
@@ -80,6 +81,13 @@ for ticker in tickers:
             
             if cur_val > buy_ref:
                 buy_ref = cur_val
+        
+        # cont_buys = 0
+        # for i in transactions:
+        #     if i == 'B':
+        #         cont_buys=cont_buys+1
+        #     else: 
+        #         cont_buys=cont_buys-1 
     
 
     number_of_pending_sale_trans = len(buy_level)
